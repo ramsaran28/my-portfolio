@@ -3,24 +3,321 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --text-on-dark-body: rgba(255, 255, 255, 0.88);
+  --text-on-dark-label: rgba(255, 255, 255, 0.65);
+  --text-on-dark-desc: rgba(255, 255, 255, 0.8);
+  --text-on-dark-pill: #f0f0f0;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
-    --foreground: #ededed;
+    --foreground: rgba(255, 255, 255, 0.88);
   }
+}
+
+/* Semantic contrast utilities (non-heading copy only; headings stay utility white/display) */
+.text-on-dark-body {
+  color: var(--text-on-dark-body);
+}
+
+.text-on-dark-label {
+  color: var(--text-on-dark-label);
+}
+
+.text-on-dark-desc {
+  color: var(--text-on-dark-desc);
+}
+
+.text-on-dark-pill {
+  color: var(--text-on-dark-pill);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Premium hero terminal — block cursor (█), ~0.5s phase */
+@keyframes hero-terminal-cursor {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.hero-terminal-cursor {
+  animation: hero-terminal-cursor 1s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-terminal-cursor {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+/* CRT-style horizontal scanlines (2px rhythm) */
+.hero-terminal-scanlines {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 1px,
+    rgba(0, 0, 0, 0.03) 1px,
+    rgba(0, 0, 0, 0.03) 2px
+  );
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  font-size: 17px;
+  line-height: 1.78;
+  font-weight: 400;
+}
+
+/* Scroll-driven fade-up (paired with JS IntersectionObserver) */
+.scroll-fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.5s ease-out,
+    transform 0.5s ease-out;
+}
+
+.scroll-fade-in.scroll-fade-in--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (max-width: 767px) {
+  /* Baseline readability on small screens (utility classes elsewhere still apply) */
+  body {
+    font-size: 15px;
+    line-height: 1.75;
+  }
+}
+
+/* Playfair — hero name & section headings */
+.font-display {
+  font-family: var(--font-playfair-display), ui-serif, Georgia, serif;
+}
+
+/* JetBrains — mono accents (default weight 500 for caps labels via component) */
+.font-mono-accent {
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+}
+
+/* Legacy About helpers → map to global stack */
+.font-inter-about {
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+.font-playfair-about {
+  font-family: var(--font-playfair-display), ui-serif, Georgia, serif;
+}
+
+.font-jetbrains-about {
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+}
+
+/* Site-wide subtle graph grid + vignette (above ambient backdrop, below content) */
+.page-texture-grid {
+  background-image:
+    linear-gradient(to right, #3d3e4a 1px, transparent 1px),
+    linear-gradient(to bottom, #3d3e4a 1px, transparent 1px);
+  background-size: 52px 52px;
+  opacity: 0.045;
+}
+
+.page-texture-vignette {
+  background: radial-gradient(
+    ellipse 85% 65% at 50% 45%,
+    transparent 0%,
+    rgba(2, 6, 23, 0.35) 100%
+  );
+  opacity: 0.28;
+}
+
+@keyframes portfolio-marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: portfolio-marquee 48s linear infinite;
+}
+
+/* Subtle ambient texture (Pinterest-style grey layers) */
+@keyframes ambient-stripe-drift {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 140px 140px;
+  }
+}
+
+@keyframes ambient-stripe-drift-reverse {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: -100px 100px;
+  }
+}
+
+@keyframes ambient-soft-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+.ambient-texture-stripes {
+  background-image: repeating-linear-gradient(
+    -32deg,
+    rgba(255, 255, 255, 0.055) 0,
+    rgba(255, 255, 255, 0.055) 1px,
+    transparent 1px,
+    transparent 56px
+  );
+  background-size: 140px 140px;
+  animation: ambient-stripe-drift 52s linear infinite;
+}
+
+.ambient-texture-stripes-reverse {
+  background-image: repeating-linear-gradient(
+    28deg,
+    rgba(255, 255, 255, 0.038) 0,
+    rgba(255, 255, 255, 0.038) 1px,
+    transparent 1px,
+    transparent 72px
+  );
+  background-size: 160px 160px;
+  animation: ambient-stripe-drift-reverse 68s linear infinite;
+}
+
+.ambient-mesh-dots {
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.08) 1px,
+    transparent 1px
+  );
+  background-size: 24px 24px;
+  animation: ambient-soft-pulse 14s ease-in-out infinite;
+}
+
+@keyframes hero-status-dot-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.45);
+  }
+  50% {
+    opacity: 0.9;
+    box-shadow: 0 0 10px 2px rgba(0, 255, 136, 0.35);
+  }
+}
+
+.hero-intern-dot {
+  animation: hero-status-dot-pulse 2s ease-in-out infinite;
+}
+
+/* Project cards — shimmer border sweep on hover */
+@keyframes project-shimmer-border {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.project-card-shimmer-wrap {
+  position: relative;
+  border-radius: 1rem;
+  padding: 1px;
+  background: #3d3e4a;
+  transition: background 0.3s ease;
+}
+
+.project-card-shimmer-wrap::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    90deg,
+    #3d3e4a 0%,
+    #3d3e4a 35%,
+    rgba(255, 255, 255, 0.28) 50%,
+    #3d3e4a 65%,
+    #3d3e4a 100%
+  );
+  background-size: 200% 100%;
+  background-position: 200% 0;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.project-card-shimmer-wrap:hover::before {
+  opacity: 1;
+  animation: project-shimmer-border 2.2s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-fade-in,
+  .scroll-fade-in.scroll-fade-in--visible {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .project-card-shimmer-wrap:hover::before {
+    animation: none;
+    opacity: 0.5;
+    background-position: 50% 0;
+  }
+
+  .hero-intern-dot {
+    animation: none;
+  }
+
+  .animate-marquee {
+    animation: none;
+  }
+
+  .ambient-texture-stripes,
+  .ambient-texture-stripes-reverse {
+    animation: none;
+  }
+
+  .ambient-mesh-dots {
+    animation: none;
+    opacity: 0.45;
+  }
 }
