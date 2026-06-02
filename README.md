@@ -39,6 +39,8 @@ The primary goal was to build a portfolio that stands on its own as a demonstrat
 ---
 
 ## Project Structure
+
+
 my-portfolio/
 ├── app/               # Next.js App Router — pages and layouts
 ├── public/            # Static assets (images, icons, fonts)
