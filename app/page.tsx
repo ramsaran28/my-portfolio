@@ -185,7 +185,7 @@ function Navbar() {
             aria-hidden
           />
           <span className="font-mono-accent text-[16px] tracking-[-0.02em] text-on-dark-body" style={{ fontWeight: 500 }}>
-            ~/portfolio
+            ~/ram-saran-portfolio
           </span>
         </a>
 
@@ -298,7 +298,7 @@ const HERO_TERMINAL_SCRIPT: readonly HeroTerminalScriptRow[] = [
   { cmd: "$ whoami", resp: "ram-saran-venkatasalapathy", variant: "whoami" },
   { cmd: "$ cat about.txt", resp: "CS Student @ Oregon State University", variant: "plain" },
   { cmd: "$ skills --top", resp: "python · javascript · fastapi · c++", variant: "skills" },
-  { cmd: "$ projects --count", resp: "4 shipped · route opt · stacksense", variant: "projects" },
+  { cmd: "$ projects --count", resp: "5 shipped · route opt · engr330", variant: "projects" },
   { cmd: "$ experience --current", resp: "UIT Service Desk · TA @ OSU", variant: "experience" },
   { cmd: "$ awards --list", resp: "2nd Place · AI for Good @ OSU Hackathon", variant: "awards" },
   { cmd: "$ status", resp: "> open to internships ✓", variant: "status" },
@@ -667,7 +667,7 @@ function Hero() {
               className="mb-10 flex flex-wrap items-center gap-0 text-[16px] text-on-dark-body"
               style={{ fontWeight: 400 }}
             >
-              <span>4+ PROJECTS</span>
+              <span>5+ PROJECTS</span>
               <span className="mx-4 h-3 w-px shrink-0 bg-[#4e4f5c]" aria-hidden />
               <span>OREGON STATE</span>
             </motion.div>
@@ -735,7 +735,7 @@ const ABOUT_BIO_TEXT = `I'm Ram Saran Venkatasalapathy, a Computer Science under
 const aboutStats = [
   { target: 250, suffix: "+", label: "STUDENTS MENTORED" },
   { target: 3, suffix: "+", label: "YEARS CODING" },
-  { target: 4, suffix: "+", label: "PROJECTS SHIPPED" },
+  { target: 5, suffix: "+", label: "PROJECTS SHIPPED" },
 ] as const
 
 function StatCount({
@@ -801,6 +801,16 @@ function AboutIntro() {
                 <br />
                 Driving impact.
               </h2>
+              <div className="relative mt-10 aspect-[3/4] w-full max-w-[280px] overflow-hidden rounded-2xl border border-white/[0.12] shadow-[0_12px_40px_rgba(0,0,0,0.45)]">
+                <Image
+                  src="/about/profile.png"
+                  alt="Portrait of Ram Saran Venkatasalapathy"
+                  fill
+                  sizes="(max-width: 1024px) 280px, 280px"
+                  className="object-cover object-[center_20%]"
+                  priority
+                />
+              </div>
             </div>
 
             <div className="flex flex-col">
@@ -946,6 +956,20 @@ const projects = [
     link: "https://github.com/ramsaran28",
     github: "https://github.com/ramsaran28",
   },
+  {
+    id: "algorithmic-injustice" as const,
+    number: "05",
+    period: "Jun 2026",
+    title: "Algorithmic Injustice — ENGR 330 Digital Portfolio",
+    description:
+      "A full stack digital portfolio analyzing bias in automated decision making systems, built with Next.js 15 and TypeScript and deployed on Vercel. Covers AI hiring bias, facial recognition inequity, and justice oriented engineering frameworks across six interconnected pages.",
+    longDescription:
+      "Built a production grade digital portfolio for my ENGR 330 Inclusive and Equitable Engineering final project at Oregon State University. The site analyzes how AI systems in hiring, policing, and facial recognition encode historical inequality through nine connected Project Building Blocks. Designed and shipped the entire site in one day using Cursor as a coding assistant. Features include a visual timeline of AI bias history from the 1970s to present, an intersectional stakeholder profile card, a Design Justice framework analysis with three actionable strategies, a 9 PBB integration grid, and a dedicated APA references page. The project applies frameworks including Crenshaw's intersectionality theory, Costanza Chock's Design Justice, and the ACM Code of Ethics to propose concrete reforms to AI hiring standards including mandatory intersectional disparate impact analysis before deployment.",
+    tags: ["NEXT.JS", "FULL STACK"],
+    tech: ["Next.js", "TypeScript", "Tailwind CSS", "Vercel"],
+    link: "https://engr330-final-project.vercel.app",
+    github: "https://github.com/ramsaran28/Engr330-Final-Project",
+  },
 ]
 
 type ProjectCardData = (typeof projects)[number]
@@ -970,6 +994,8 @@ const experienceCardVariants = {
   },
 }
 
+const ENGR330_LIVE_URL = "https://engr330-final-project.vercel.app"
+
 const routeOptimizationScreenshots = [
   {
     src: "/projects/last-mile/dashboard.png",
@@ -988,7 +1014,29 @@ const routeOptimizationScreenshots = [
   },
 ] as const
 
-type RouteScreenshot = (typeof routeOptimizationScreenshots)[number]
+const algorithmicInjusticeScreenshots = [
+  {
+    src: "/projects/algorithmic-injustice/home.png",
+    alt: "Algorithmic Injustice portfolio homepage with project title and introduction",
+    label: "Home",
+  },
+  {
+    src: "/projects/algorithmic-injustice/historical-context.png",
+    alt: "Historical Context page with a visual timeline of AI bias from the 1970s to present",
+    label: "Historical Context",
+  },
+  {
+    src: "/projects/algorithmic-injustice/intersectional-analysis.png",
+    alt: "Intersectional Analysis page with Amara Diallo stakeholder profile card",
+    label: "Intersectional Analysis",
+  },
+] as const
+
+type ProjectScreenshot = {
+  readonly src: string
+  readonly alt: string
+  readonly label: string
+}
 
 function ProjectImageLightbox({
   images,
@@ -996,7 +1044,7 @@ function ProjectImageLightbox({
   onClose,
   onNavigate,
 }: {
-  images: readonly RouteScreenshot[]
+  images: readonly ProjectScreenshot[]
   index: number
   onClose: () => void
   onNavigate: (nextIndex: number) => void
@@ -1084,7 +1132,17 @@ function ProjectImageLightbox({
   )
 }
 
-function RouteOptimizationGallery() {
+function ProjectScreenshotGallery({
+  images,
+  caption,
+  liveUrl,
+  liveLabel,
+}: {
+  images: readonly ProjectScreenshot[]
+  caption: string
+  liveUrl?: string
+  liveLabel?: string
+}) {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
 
   return (
@@ -1095,20 +1153,22 @@ function RouteOptimizationGallery() {
             className="font-mono-accent text-[15px] uppercase tracking-[0.14em] text-on-dark-label"
             style={{ fontWeight: 500 }}
           >
-            Interactive dashboard · Click to expand
+            {caption}
           </p>
-          <a
-            href={LAST_MILE_DASHBOARD_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-mono-accent text-[14px] text-[#4ade80] transition-opacity hover:opacity-90"
-            style={{ fontWeight: 500 }}
-          >
-            Open live dashboard ↗
-          </a>
+          {liveUrl ? (
+            <a
+              href={liveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-mono-accent text-[14px] text-[#4ade80] transition-opacity hover:opacity-90"
+              style={{ fontWeight: 500 }}
+            >
+              {liveLabel ?? "Open live site ↗"}
+            </a>
+          ) : null}
         </div>
         <ul className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-          {routeOptimizationScreenshots.map((shot, index) => (
+          {images.map((shot, index) => (
             <li key={shot.src}>
               <button
                 type="button"
@@ -1132,7 +1192,7 @@ function RouteOptimizationGallery() {
       </div>
       {lightboxIndex !== null ? (
         <ProjectImageLightbox
-          images={routeOptimizationScreenshots}
+          images={images}
           index={lightboxIndex}
           onClose={() => setLightboxIndex(null)}
           onNavigate={setLightboxIndex}
@@ -1262,15 +1322,29 @@ function FeaturedProjectCard({ featured }: { featured: ProjectCardData }) {
       </div>
       {showRouteGallery ? (
         <div className="relative z-[1] mt-10 border-t border-white/[0.08] pt-10">
-          <RouteOptimizationGallery />
+          <ProjectScreenshotGallery
+            images={routeOptimizationScreenshots}
+            caption="Interactive dashboard · Click to expand"
+            liveUrl={LAST_MILE_DASHBOARD_URL}
+            liveLabel="Open live dashboard ↗"
+          />
         </div>
       ) : null}
     </article>
   )
 }
 
+function isExternalProjectLink(link: string) {
+  return link.startsWith("http") && !link.includes("github.com")
+}
+
 function ProjectGridCard({ project }: { project: ProjectCardData }) {
   const { ref, scrollFadeClass } = useScrollFadeIn()
+  const [expanded, setExpanded] = useState(false)
+  const longDescription = "longDescription" in project ? project.longDescription : undefined
+  const showLongDescription = Boolean(longDescription && expanded)
+  const externalLink = isExternalProjectLink(project.link)
+  const showGallery = project.id === "algorithmic-injustice"
 
   return (
     <div ref={ref} className={`${scrollFadeClass} ${frostedGlassCardClass} group relative h-full`}>
@@ -1302,9 +1376,23 @@ function ProjectGridCard({ project }: { project: ProjectCardData }) {
           </span>
           <span>{project.period}</span>
         </div>
-        <p className="mb-6 flex-1 text-[17px] max-md:text-[15px] leading-[1.75] text-on-dark-desc" style={{ fontWeight: 400 }}>
-          {project.description}
+        <p
+          className={`flex-1 text-[17px] max-md:text-[15px] leading-[1.75] text-on-dark-desc ${longDescription ? "mb-3" : "mb-6"}`}
+          style={{ fontWeight: 400 }}
+        >
+          {showLongDescription ? longDescription : project.description}
         </p>
+        {longDescription ? (
+          <button
+            type="button"
+            onClick={() => setExpanded((open) => !open)}
+            className="mb-6 text-left text-[15px] text-[#4ade80] transition-opacity hover:opacity-90"
+            style={{ fontWeight: 500 }}
+            aria-expanded={expanded}
+          >
+            {expanded ? "Show less ↑" : "Read more →"}
+          </button>
+        ) : null}
         <div className="flex flex-wrap gap-2">
           {project.tech.map((tech) => (
             <span key={tech} className="font-mono-accent border border-white/15 bg-transparent px-2.5 py-1.5 text-[16px] max-md:text-[15px] tracking-[0.06em] text-on-dark-pill" style={{ fontWeight: 500 }}>
@@ -1313,13 +1401,29 @@ function ProjectGridCard({ project }: { project: ProjectCardData }) {
           ))}
         </div>
         <div className="mt-8 flex flex-wrap gap-6 border-t border-[#3d3e4a] pt-6">
-          <a href={project.link} className="text-[17px] max-md:text-[15px] text-white transition-opacity hover:opacity-90" style={{ fontWeight: 500 }}>
-            View project ↗
+          <a
+            href={project.link}
+            target={externalLink ? "_blank" : undefined}
+            rel={externalLink ? "noopener noreferrer" : undefined}
+            className="text-[17px] max-md:text-[15px] text-white transition-opacity hover:opacity-90"
+            style={{ fontWeight: 500 }}
+          >
+            {externalLink ? "Live site ↗" : "View project ↗"}
           </a>
-          <a href={project.github} className="text-[17px] max-md:text-[15px] text-on-dark-body transition-colors hover:text-white" style={{ fontWeight: 500 }}>
+          <a href={project.github} target="_blank" rel="noopener noreferrer" className="text-[17px] max-md:text-[15px] text-on-dark-body transition-colors hover:text-white" style={{ fontWeight: 500 }}>
             GitHub →
           </a>
         </div>
+        {showGallery ? (
+          <div className="relative z-[1] mt-8 border-t border-white/[0.08] pt-8">
+            <ProjectScreenshotGallery
+              images={algorithmicInjusticeScreenshots}
+              caption="Site preview · Click to expand"
+              liveUrl={ENGR330_LIVE_URL}
+              liveLabel="Open live site ↗"
+            />
+          </div>
+        ) : null}
       </div>
     </div>
   )
