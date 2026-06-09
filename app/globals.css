@@ -3,17 +3,18 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --text-on-dark-body: rgba(255, 255, 255, 0.88);
-  --text-on-dark-label: rgba(255, 255, 255, 0.65);
-  --text-on-dark-desc: rgba(255, 255, 255, 0.8);
-  --text-on-dark-pill: #f0f0f0;
+  --font-serif: "Times New Roman", Times, "Liberation Serif", Georgia, serif;
+  --text-on-dark-body: rgba(255, 255, 255, 0.92);
+  --text-on-dark-label: rgba(255, 255, 255, 0.78);
+  --text-on-dark-desc: rgba(255, 255, 255, 0.9);
+  --text-on-dark-pill: #f5f5f5;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+  --font-sans: var(--font-serif);
+  --font-mono: var(--font-serif);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -80,10 +81,11 @@ html {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  font-size: 17px;
-  line-height: 1.78;
+  font-family: var(--font-serif);
+  font-size: 18px;
+  line-height: 1.72;
   font-weight: 400;
+  letter-spacing: 0.01em;
 }
 
 /* Scroll-driven fade-up (paired with JS IntersectionObserver) */
@@ -101,34 +103,18 @@ body {
 }
 
 @media (max-width: 767px) {
-  /* Baseline readability on small screens (utility classes elsewhere still apply) */
   body {
-    font-size: 15px;
-    line-height: 1.75;
+    font-size: 16px;
+    line-height: 1.7;
   }
 }
 
-/* Playfair — hero name & section headings */
-.font-display {
-  font-family: var(--font-playfair-display), ui-serif, Georgia, serif;
-}
-
-/* JetBrains — mono accents (default weight 500 for caps labels via component) */
-.font-mono-accent {
-  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
-}
-
-/* Legacy About helpers → map to global stack */
-.font-inter-about {
-  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-}
-
-.font-playfair-about {
-  font-family: var(--font-playfair-display), ui-serif, Georgia, serif;
-}
-
+.font-display,
+.font-mono-accent,
+.font-inter-about,
+.font-playfair-about,
 .font-jetbrains-about {
-  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-family: var(--font-serif);
 }
 
 /* Site-wide subtle graph grid + vignette (above ambient backdrop, below content) */

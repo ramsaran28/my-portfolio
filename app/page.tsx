@@ -619,7 +619,7 @@ function Hero() {
                 style={{ fontWeight: 900 }}
               >
                 <span
-                  className="block break-words leading-[0.95] tracking-[-0.04em]"
+                  className="block break-words leading-[0.98] tracking-[-0.01em]"
                   style={{ fontSize: "clamp(2.25rem, 5.5vw + 0.75rem, 5.5rem)" }}
                 >
                   Ram Saran
@@ -807,7 +807,7 @@ function AboutIntro() {
                   alt="Portrait of Ram Saran Venkatasalapathy"
                   fill
                   sizes="(max-width: 1024px) 280px, 280px"
-                  className="object-cover object-[center_20%]"
+                  className="object-cover object-[center_12%]"
                   priority
                 />
               </div>
@@ -908,8 +908,22 @@ const LAST_MILE_DASHBOARD_URL = "https://lastmile-dashboard.vercel.app/dashboard
 
 const projects = [
   {
+    id: "algorithmic-injustice" as const,
+    sortDate: "2026-06",
+    period: "Jun 2026",
+    title: "Algorithmic Injustice — ENGR 330 Digital Portfolio",
+    description:
+      "A full stack digital portfolio analyzing bias in automated decision making systems, built with Next.js 15 and TypeScript and deployed on Vercel. Covers AI hiring bias, facial recognition inequity, and justice oriented engineering frameworks across six interconnected pages.",
+    longDescription:
+      "Built a production grade digital portfolio for my ENGR 330 Inclusive and Equitable Engineering final project at Oregon State University. The site analyzes how AI systems in hiring, policing, and facial recognition encode historical inequality through nine connected Project Building Blocks. Designed and shipped the entire site in one day using Cursor as a coding assistant. Features include a visual timeline of AI bias history from the 1970s to present, an intersectional stakeholder profile card, a Design Justice framework analysis with three actionable strategies, a 9 PBB integration grid, and a dedicated APA references page. The project applies frameworks including Crenshaw's intersectionality theory, Costanza Chock's Design Justice, and the ACM Code of Ethics to propose concrete reforms to AI hiring standards including mandatory intersectional disparate impact analysis before deployment.",
+    tags: ["NEXT.JS", "FULL STACK"],
+    tech: ["Next.js", "TypeScript", "Tailwind CSS", "Vercel"],
+    link: "https://engr330-final-project.vercel.app",
+    github: "https://github.com/ramsaran28/Engr330-Final-Project",
+  },
+  {
     id: "route-optimization" as const,
-    number: "01",
+    sortDate: "2026-05-20",
     period: "May 2026",
     award: "2nd Place — AI for Good @ OSU Hackathon",
     title: "Last-Mile Route Optimization Analysis",
@@ -922,7 +936,7 @@ const projects = [
   },
   {
     id: "stacksense" as const,
-    number: "02",
+    sortDate: "2026-05-10",
     period: "May 2026",
     title: "Stacksense — AI-Powered GitHub Codebase Health Analyzer",
     description:
@@ -934,7 +948,7 @@ const projects = [
   },
   {
     id: "cryptosentinel" as const,
-    number: "03",
+    sortDate: "2026-04",
     period: "Apr 2026–Present",
     title: "CryptoSentinel — AI-Powered Crypto Monitoring System",
     description:
@@ -946,7 +960,7 @@ const projects = [
   },
   {
     id: "log-pipeline" as const,
-    number: "04",
+    sortDate: "2026-03",
     period: "Mar 2026",
     title: "Log Data Pipeline with API",
     description:
@@ -956,23 +970,19 @@ const projects = [
     link: "https://github.com/ramsaran28",
     github: "https://github.com/ramsaran28",
   },
-  {
-    id: "algorithmic-injustice" as const,
-    number: "05",
-    period: "Jun 2026",
-    title: "Algorithmic Injustice — ENGR 330 Digital Portfolio",
-    description:
-      "A full stack digital portfolio analyzing bias in automated decision making systems, built with Next.js 15 and TypeScript and deployed on Vercel. Covers AI hiring bias, facial recognition inequity, and justice oriented engineering frameworks across six interconnected pages.",
-    longDescription:
-      "Built a production grade digital portfolio for my ENGR 330 Inclusive and Equitable Engineering final project at Oregon State University. The site analyzes how AI systems in hiring, policing, and facial recognition encode historical inequality through nine connected Project Building Blocks. Designed and shipped the entire site in one day using Cursor as a coding assistant. Features include a visual timeline of AI bias history from the 1970s to present, an intersectional stakeholder profile card, a Design Justice framework analysis with three actionable strategies, a 9 PBB integration grid, and a dedicated APA references page. The project applies frameworks including Crenshaw's intersectionality theory, Costanza Chock's Design Justice, and the ACM Code of Ethics to propose concrete reforms to AI hiring standards including mandatory intersectional disparate impact analysis before deployment.",
-    tags: ["NEXT.JS", "FULL STACK"],
-    tech: ["Next.js", "TypeScript", "Tailwind CSS", "Vercel"],
-    link: "https://engr330-final-project.vercel.app",
-    github: "https://github.com/ramsaran28/Engr330-Final-Project",
-  },
-]
+] as const
 
-type ProjectCardData = (typeof projects)[number]
+type ProjectRecord = (typeof projects)[number]
+type ProjectCardData = ProjectRecord & { number: string }
+
+function getSortedProjects(): ProjectCardData[] {
+  return [...projects]
+    .sort((a, b) => b.sortDate.localeCompare(a.sortDate))
+    .map((project, index) => ({
+      ...project,
+      number: String(index + 1).padStart(2, "0"),
+    }))
+}
 
 const experienceCardContainerVariants = {
   hidden: { opacity: 0 },
@@ -993,8 +1003,6 @@ const experienceCardVariants = {
     },
   },
 }
-
-const ENGR330_LIVE_URL = "https://engr330-final-project.vercel.app"
 
 const routeOptimizationScreenshots = [
   {
@@ -1036,6 +1044,25 @@ type ProjectScreenshot = {
   readonly src: string
   readonly alt: string
   readonly label: string
+}
+
+type ProjectGalleryConfig = {
+  images: readonly ProjectScreenshot[]
+  caption: string
+  liveLabel?: string
+}
+
+const projectGalleries: Partial<Record<ProjectRecord["id"], ProjectGalleryConfig>> = {
+  "route-optimization": {
+    images: routeOptimizationScreenshots,
+    caption: "Interactive dashboard · Click to expand",
+    liveLabel: "Open live dashboard ↗",
+  },
+  "algorithmic-injustice": {
+    images: algorithmicInjusticeScreenshots,
+    caption: "Site preview · Click to expand",
+    liveLabel: "Open live site ↗",
+  },
 }
 
 function ProjectImageLightbox({
@@ -1238,8 +1265,12 @@ const frostedGlassCardClass =
 
 function FeaturedProjectCard({ featured }: { featured: ProjectCardData }) {
   const { ref, scrollFadeClass } = useScrollFadeIn()
+  const [expanded, setExpanded] = useState(false)
   const showMockup = featured.id === "stacksense"
-  const showRouteGallery = featured.id === "route-optimization"
+  const gallery = projectGalleries[featured.id]
+  const externalLink = isExternalProjectLink(featured.link)
+  const longDescription = "longDescription" in featured ? featured.longDescription : undefined
+  const showLongDescription = Boolean(longDescription && expanded)
 
   return (
     <article
@@ -1284,8 +1315,19 @@ function FeaturedProjectCard({ featured }: { featured: ProjectCardData }) {
             <span>{featured.period}</span>
           </div>
           <p className="mb-6 max-w-2xl text-[17px] max-md:text-[15px] leading-[1.75] text-on-dark-desc" style={{ fontWeight: 400 }}>
-            {featured.description}
+            {showLongDescription ? longDescription : featured.description}
           </p>
+          {longDescription ? (
+            <button
+              type="button"
+              onClick={() => setExpanded((open) => !open)}
+              className="mb-6 text-left text-[15px] text-[#4ade80] transition-opacity hover:opacity-90"
+              style={{ fontWeight: 500 }}
+              aria-expanded={expanded}
+            >
+              {expanded ? "Show less ↑" : "Read more →"}
+            </button>
+          ) : null}
           <div className="flex flex-wrap gap-2">
             {featured.tech.map((tech) => (
               <span key={tech} className="font-mono-accent border border-white/15 bg-transparent px-2.5 py-1.5 text-[16px] max-md:text-[15px] tracking-[0.06em] text-on-dark-pill" style={{ fontWeight: 500 }}>
@@ -1296,12 +1338,12 @@ function FeaturedProjectCard({ featured }: { featured: ProjectCardData }) {
           <div className="mt-8 flex flex-wrap gap-6">
             <a
               href={featured.link}
-              target={featured.id === "route-optimization" ? "_blank" : undefined}
-              rel={featured.id === "route-optimization" ? "noopener noreferrer" : undefined}
+              target={externalLink ? "_blank" : undefined}
+              rel={externalLink ? "noopener noreferrer" : undefined}
               className="text-[17px] max-md:text-[15px] text-white transition-opacity hover:opacity-90"
               style={{ fontWeight: 500 }}
             >
-              {featured.id === "route-optimization" ? "Live dashboard ↗" : "View project ↗"}
+              {externalLink ? (gallery?.liveLabel ?? "Live site ↗") : "View project ↗"}
             </a>
             <a
               href={featured.github}
@@ -1320,13 +1362,13 @@ function FeaturedProjectCard({ featured }: { featured: ProjectCardData }) {
           </div>
         ) : null}
       </div>
-      {showRouteGallery ? (
+      {gallery ? (
         <div className="relative z-[1] mt-10 border-t border-white/[0.08] pt-10">
           <ProjectScreenshotGallery
-            images={routeOptimizationScreenshots}
-            caption="Interactive dashboard · Click to expand"
-            liveUrl={LAST_MILE_DASHBOARD_URL}
-            liveLabel="Open live dashboard ↗"
+            images={gallery.images}
+            caption={gallery.caption}
+            liveUrl={externalLink ? featured.link : undefined}
+            liveLabel={gallery.liveLabel}
           />
         </div>
       ) : null}
@@ -1344,7 +1386,7 @@ function ProjectGridCard({ project }: { project: ProjectCardData }) {
   const longDescription = "longDescription" in project ? project.longDescription : undefined
   const showLongDescription = Boolean(longDescription && expanded)
   const externalLink = isExternalProjectLink(project.link)
-  const showGallery = project.id === "algorithmic-injustice"
+  const gallery = projectGalleries[project.id]
 
   return (
     <div ref={ref} className={`${scrollFadeClass} ${frostedGlassCardClass} group relative h-full`}>
@@ -1414,13 +1456,13 @@ function ProjectGridCard({ project }: { project: ProjectCardData }) {
             GitHub →
           </a>
         </div>
-        {showGallery ? (
+        {gallery ? (
           <div className="relative z-[1] mt-8 border-t border-white/[0.08] pt-8">
             <ProjectScreenshotGallery
-              images={algorithmicInjusticeScreenshots}
-              caption="Site preview · Click to expand"
-              liveUrl={ENGR330_LIVE_URL}
-              liveLabel="Open live site ↗"
+              images={gallery.images}
+              caption={gallery.caption}
+              liveUrl={externalLink ? project.link : undefined}
+              liveLabel={gallery.liveLabel}
             />
           </div>
         ) : null}
@@ -1430,7 +1472,8 @@ function ProjectGridCard({ project }: { project: ProjectCardData }) {
 }
 
 function Projects() {
-  const [featured, ...rest] = projects
+  const sortedProjects = getSortedProjects()
+  const [featured, ...rest] = sortedProjects
 
   return (
     <section id="work" className="bg-transparent px-6 py-[120px] md:px-[80px]">
